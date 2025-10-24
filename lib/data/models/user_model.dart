@@ -1,0 +1,17 @@
+class UserModel {
+  final String name;
+  final String email;
+  final String password;
+
+   //================ Constructor ===============
+  UserModel({required this.name, required this.email, required this.password});
+
+  //============= Factory Constructor=============
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      name: json["name"],
+      email: json["email"],
+      password: json["password"],
+    );
+  }
+}

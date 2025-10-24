@@ -14,7 +14,7 @@ class CustomTextButton extends StatelessWidget {
     final Size screenSize  = MediaQuery.of(context).size;
 
     return  SizedBox(
-      width: width?? screenSize.width * .80,
+      width: width?? screenSize.width,
       height: height?? 67,
       child: TextButton(
           onPressed: onPressed,
