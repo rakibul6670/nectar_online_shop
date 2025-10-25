@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:nectar_online_shop/data/api_services/api_response.dart';
+import 'package:nectar_online_shop/data/get_storage/auth_storage.dart';
 
 class ApiServices {
-
   //============================ Get Data =====================================
   // Future getData(Uri url) async {
   //   try {
@@ -18,12 +19,18 @@ class ApiServices {
   // }
 
   //============================ Post Data =====================================
-  static Future<ApiResponse> postData(Uri url,Map<String,dynamic> requestBody) async {
+  static Future<ApiResponse> postData(
+    Uri url,
+    Map<String, dynamic> requestBody,
+  ) async {
     try {
+      final token = AuthStorage.userToken;
+
       //-------------- request sent to server -----------
       final response = await http.post(
         url,
-        headers: {"Content-Type":"application/json"},
+        headers: {"Content-Type": "application/json", "token": token ?? " "},
+
         body: jsonEncode(requestBody),
       );
 
@@ -34,24 +41,23 @@ class ApiServices {
         return ApiResponse(
           statusCode: response.statusCode,
           isSuccess: true,
-          response: decodedData,
+          responseBody: decodedData,
           message: decodedData["message"],
         );
       } else {
         return ApiResponse(
           statusCode: response.statusCode,
           isSuccess: false,
-          response: null,
+          responseBody: null,
         );
       }
     } catch (e) {
       return ApiResponse(
-          statusCode: -1,
-          isSuccess: false,
-          response: null,
+        statusCode: -1,
+        isSuccess: false,
+        responseBody: null,
         message: e.toString(),
       );
     }
   }
-
 }

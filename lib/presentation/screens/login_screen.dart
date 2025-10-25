@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nectar_online_shop/core/constants/assets_icons_path.dart';
 import 'package:nectar_online_shop/core/validators/input_validators.dart';
-import 'package:nectar_online_shop/presentation/screens/dashboard_screen.dart';
+import 'package:nectar_online_shop/data/api_services/api_response.dart';
+import 'package:nectar_online_shop/data/get_storage/auth_storage.dart';
+import 'package:nectar_online_shop/presentation/screens/main_nav_bar_holder_screen.dart';
 import 'package:nectar_online_shop/presentation/screens/signup_screen.dart';
 import 'package:nectar_online_shop/presentation/widgets/custom_text_button.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +27,7 @@ class LoginScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
             child: Consumer<LoginProvider>(
-              builder: (context,login,child) {
+              builder: (context, login, child) {
                 return Form(
                   key: login.loginFormKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -52,7 +54,7 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(height: 10),
 
                       TextFormField(
-                        controller: login.loginEmailController,
+                        controller: login.emailController,
                         validator: InputValidators.emailValidator,
                         textInputAction: TextInputAction.next,
                         style: TextStyle(
@@ -72,7 +74,7 @@ class LoginScreen extends StatelessWidget {
 
                       TextFormField(
                         validator: InputValidators.passwordValidator,
-                        controller: login.loginPasswordController,
+                        controller: login.passwordController,
                         textInputAction: TextInputAction.next,
                         obscureText: login.isPasswordHide,
                         style: TextStyle(
@@ -82,8 +84,13 @@ class LoginScreen extends StatelessWidget {
                         ),
                         decoration: InputDecoration(
                           suffixIcon: GestureDetector(
-                              onTap: login.isPasswordVisibility,
-                              child: Icon(login.isPasswordHide? Icons.visibility_off:  Icons.visibility)),
+                            onTap: login.isPasswordVisibility,
+                            child: Icon(
+                              login.isPasswordHide
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
                         ),
                       ),
 
@@ -91,27 +98,45 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(height: 20),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text("Forgot Password", style: textTheme.bodySmall!.copyWith(
-                            color: Colors.deepPurpleAccent
-                        )),
+                        child: Text(
+                          "Forgot Password",
+                          style: textTheme.bodySmall!.copyWith(
+                            color: Colors.deepPurpleAccent,
+                          ),
+                        ),
                       ),
                       SizedBox(height: 30),
 
-
                       //----------------------- Login Button ---------
                       Center(
-                        child: CustomTextButton(
-                          // width: screenWidth * .80,
-                          onPressed: () {
-                            if(login.login()){
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> DashboardScreen()),
-                                  (predicate)=> false);
-                            }
-                            else {
-                              return ;
-                            }
-                          },
-                          buttonName: "Log In",
+                        child: Visibility(
+                          visible: login.inProgressIndicator == false,
+                          replacement: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          child: CustomTextButton(
+                            onPressed: () async {
+                              if (await login.login()) {
+                                //----------------- Snackbar -----------
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Login successful")),
+                                );
+
+                                //--------------- navigate to main navbar screen -----
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        MainNavBarHolderScreen(),
+                                  ),
+                                  (predicate) => false,
+                                );
+                              } else {
+                                return;
+                              }
+                            },
+                            buttonName: "Log In",
+                          ),
                         ),
                       ),
 
@@ -121,29 +146,38 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           //-------------------- Text ------------
-                          Text("Don't have an account?",style: textTheme.bodySmall,),
+                          Text(
+                            "Don't have an account?",
+                            style: textTheme.bodySmall,
+                          ),
                           SizedBox(width: 5),
                           //----------------- Link Text -------------
                           GestureDetector(
-                            onTap: (){
-                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> SignupScreen()),
-                                      (predicate)=> false);
-
+                            onTap: () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignupScreen(),
+                                ),
+                                (predicate) => false,
+                              );
                             },
-                            child: Text("Sign up",style: textTheme.bodySmall!.copyWith(
-                                color: Colors.deepPurpleAccent
-                            ),),
+                            child: Text(
+                              "Sign up",
+                              style: textTheme.bodySmall!.copyWith(
+                                color: Colors.deepPurpleAccent,
+                              ),
+                            ),
                           ),
 
                           //-------------------- space -----------
-                          SizedBox(height: 20,),
-
+                          SizedBox(height: 20),
                         ],
                       ),
                     ],
                   ),
                 );
-              }
+              },
             ),
           ),
         ),

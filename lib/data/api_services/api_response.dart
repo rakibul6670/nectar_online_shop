@@ -1,13 +1,13 @@
 class ApiResponse {
   final int statusCode;
   final bool isSuccess;
-  final dynamic response;
+  final dynamic responseBody;
   final String? message;
 
   ApiResponse({
     required this.statusCode,
     required this.isSuccess,
-    required this.response,
+    required this.responseBody,
     this.message,
   });
 
@@ -15,7 +15,7 @@ class ApiResponse {
     return ApiResponse(
       statusCode: response["statusCode"],
       isSuccess: response["success"],
-      response: response["responseBody"],
+      responseBody: response["responseBody"],
       message: response["message"] ?? "Something went wrong! ",
     );
   }

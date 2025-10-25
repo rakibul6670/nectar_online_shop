@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nectar_online_shop/core/constants/assets_images_path.dart';
 import 'package:nectar_online_shop/presentation/widgets/custom_text_button.dart';
 import 'package:nectar_online_shop/presentation/widgets/screen_background.dart';
-import 'dashboard_screen.dart';
 
 class SelectLocationScreen extends StatelessWidget {
   const SelectLocationScreen({super.key});
@@ -23,7 +22,7 @@ class SelectLocationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //------------------------- back button -------------
-              SizedBox(height: 15,),
+              SizedBox(height: 15),
               Align(
                 alignment: Alignment.topLeft,
                 child: GestureDetector(
@@ -33,40 +32,36 @@ class SelectLocationScreen extends StatelessWidget {
               ),
 
               //------------------- Map Image ----------------------
-              Image.asset(AssetsImagesPath.map,
+              Image.asset(
+                AssetsImagesPath.map,
                 width: screenWidth * .6,
                 height: screenHeight * .30,
                 // fit: BoxFit.cover,
               ),
 
-              SizedBox(height: 40,),
+              SizedBox(height: 40),
               //----------------- title ------------
               Text("Select Your Location", style: textTheme.headlineMedium),
 
               //---------------- sub title ----------
-              SizedBox(height: 15,),
+              SizedBox(height: 15),
               Text(
                 "Swithch on your location to stay in tune with \n what’s happening in your area",
                 textAlign: TextAlign.center,
-                style: textTheme.titleSmall!.copyWith(
-                  color: Color(0xff7C7C7C),
-                ),
+                style: textTheme.titleSmall!.copyWith(color: Color(0xff7C7C7C)),
               ),
 
               //-----------------------Submit  Button --------
-              SizedBox(height: screenHeight * .25,),
+              SizedBox(height: screenHeight * .25),
               Center(
                 child: CustomTextButton(
-
-                    onPressed: ()=> Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => DashboardScreen()),
-                    ),
-                    buttonName: "Submit"
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => DashboardScreen()),
+                  ),
+                  buttonName: "Submit",
                 ),
               ),
-
-
             ],
           ),
         ),
