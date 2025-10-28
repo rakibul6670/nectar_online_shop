@@ -5,7 +5,8 @@ import 'package:nectar_online_shop/data/models/user_model.dart';
 import 'package:get_storage/get_storage.dart';
 
 class AuthStorage {
-  static final String _userTokeyKey = "userTokenKey";
+  static final String _userTokenKey = "userTokenKey";
+  static final String isLoginKey = "isLoginKey";
   static final String _userModelKey = "userModelKey";
 
   static String? accessToken;
@@ -15,23 +16,25 @@ class AuthStorage {
   static Future saveUserData(String token, UserModel model) async {
     GetStorage store = GetStorage();
     //---------------- store in local storage -------
-    await store.write(_userTokeyKey, token);
+    await store.write(_userTokenKey, token);
     await store.write(_userModelKey, jsonEncode(model.toJson()));
-
+    await store.write(isLoginKey, true);
     //--------------- local variable value set -------
     accessToken = token;
     accessModel = model;
+
     Logger logger = Logger();
     logger.i("User data save successful");
-    logger.i("User token: ${store.read(_userTokeyKey)}");
+    logger.i("User token: ${store.read(_userTokenKey)}");
     logger.i("User user model : ${store.read(_userModelKey)}");
+    logger.i("User token: ${store.read(isLoginKey)}");
   }
 
   //=========================== Get Data Save ================================
-  static void getUserData() {
+  static Future getUserData() async {
     GetStorage store = GetStorage();
     //---------------- store in local storage -------
-    String? token = store.read(_userTokeyKey);
+    String? token = store.read(_userTokenKey);
     String? userModel = store.read(_userModelKey);
 
     if (token != null) {
@@ -40,5 +43,21 @@ class AuthStorage {
         accessModel = UserModel.fromJson(jsonDecode(userModel));
       }
     }
+  }
+
+  //=================== Login status ============
+  static bool isLogin() {
+    GetStorage storage = GetStorage();
+    return storage.read(isLoginKey)??false;
+  }
+
+  //=============== Clear user data =============
+  static void clearUserData() {
+    GetStorage store = GetStorage();
+    store.remove(_userTokenKey);
+    store.remove(_userModelKey);
+    store.remove(isLoginKey);
+    accessToken = null;
+    accessModel = null;
   }
 }

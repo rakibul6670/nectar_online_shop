@@ -9,6 +9,8 @@ import 'package:nectar_online_shop/data/models/user_model.dart';
 class LoginProvider extends ChangeNotifier {
   Logger logger = Logger();
 
+
+
   //----------------- Password visibility off on -----------
   bool isPasswordHide = true;
 
@@ -20,6 +22,8 @@ class LoginProvider extends ChangeNotifier {
   final TextEditingController passwordController = TextEditingController();
 
   bool inProgressIndicator = false;
+
+  bool isLoginSuccess = true;
 
   //============================ Login Method =======================
   Future<bool> login() async {
@@ -33,27 +37,43 @@ class LoginProvider extends ChangeNotifier {
 
   //============================ Login User ==========================
   Future loginUser() async {
-    inProgressIndicator = false;
+    inProgressIndicator = true;
+    isLoginSuccess = false;
     notifyListeners();
 
-    Map<String, dynamic> requestBody = {};
+    Map<String, dynamic> requestBody = {
+      "email":emailController.text.trim(),
+      "password":passwordController.text.trim(),
+    };
 
     ApiResponse response = await ApiServices.postData(
       Urls.loginUrl,
       requestBody,
     );
 
-    if (response.isSuccess && response.statusCode == 201) {
-      final token = response.responseBody["token"];
+    inProgressIndicator = false;
+    notifyListeners();
 
+    if (response.isSuccess && (response.statusCode == 201 || response.statusCode == 200)) {
+
+      final token = response.responseBody["data"]["token"];
+      //--------- user model e data save -------
       UserModel model = UserModel.fromJson(
         response.responseBody["data"]["user"],
       );
-      AuthStorage.saveUserData(token, model);
 
-      inProgressIndicator = false;
+      //----------- Get storage e data save --------------
+      await AuthStorage.saveUserData(token, model);
+
+       AuthStorage.isLogin();
+
+
+      isLoginSuccess = true;
       notifyListeners();
-      logger.i(response.message);
+
+      //------------ Clear all field -----------
+      clearField();
+
     } else {
       logger.i(response.message);
     }
@@ -64,6 +84,12 @@ class LoginProvider extends ChangeNotifier {
     isPasswordHide = !isPasswordHide;
     notifyListeners();
   }
+  //==================== clear all field ===========================
+  void clearField(){
+    emailController.clear();
+    passwordController.clear();
+  }
+
 
   //==================== Dispose all field ===========================
   @override

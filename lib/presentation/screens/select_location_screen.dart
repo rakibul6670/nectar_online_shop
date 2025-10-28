@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nectar_online_shop/core/constants/assets_images_path.dart';
+import 'package:nectar_online_shop/presentation/screens/main_nav_bar_holder_screen.dart';
 import 'package:nectar_online_shop/presentation/widgets/custom_text_button.dart';
 import 'package:nectar_online_shop/presentation/widgets/screen_background.dart';
 
@@ -57,7 +58,7 @@ class SelectLocationScreen extends StatelessWidget {
                 child: CustomTextButton(
                   onPressed: () => Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => DashboardScreen()),
+                    MaterialPageRoute(builder: (context) => MainNavBarHolderScreen()),
                   ),
                   buttonName: "Submit",
                 ),

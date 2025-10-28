@@ -116,21 +116,34 @@ class LoginScreen extends StatelessWidget {
                           ),
                           child: CustomTextButton(
                             onPressed: () async {
-                              if (await login.login()) {
-                                //----------------- Snackbar -----------
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Login successful")),
-                                );
+                              if (login.loginFormKey.currentState!.validate()) {
+                                await login.loginUser();
+                                if (login.isLoginSuccess) {
+                                  //----------------- Snackbar -----------
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Login successful")),
+                                  );
 
-                                //--------------- navigate to main navbar screen -----
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        MainNavBarHolderScreen(),
-                                  ),
-                                  (predicate) => false,
-                                );
+                                  //--------------- navigate to main navbar screen -----
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          MainNavBarHolderScreen(),
+                                    ),
+                                    (predicate) => false,
+                                  );
+                                }
+                                else {
+                                  //----------------- Snackbar -----------
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "Invalid email or password",
+                                      ),
+                                    ),
+                                  );
+                                }
                               } else {
                                 return;
                               }

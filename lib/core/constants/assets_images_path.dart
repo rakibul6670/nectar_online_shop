@@ -6,7 +6,7 @@ class AssetsImagesPath {
   static const String bottomRectangle = "assets/images/bottom_Rectangle_bg.png";
   static const String topRectangle = "assets/images/top_Rectangle_bg.png";
 
-  // static const String splashLogo = "";
+   static const String accountBg = "assets/images/profile_bg.jpg";
   // static const String splashLogo = "";
 
 }

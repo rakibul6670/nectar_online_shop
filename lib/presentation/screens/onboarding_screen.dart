@@ -22,7 +22,9 @@ class OnboardingScreen extends StatelessWidget {
           width: screenSize.width,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(AssetsImagesPath.onboardingBg),
+              image: AssetImage(AssetsImagesPath.onboardingBg,
+              ),
+              fit: BoxFit.cover
             ),
           ),
           child: Column(

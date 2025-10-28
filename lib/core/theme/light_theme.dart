@@ -37,17 +37,19 @@ final ThemeData lightTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       backgroundColor: AppColors.lightPrimaryColor,
+      foregroundColor: Color(0xffffffff),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(19)),
     ),
   ),
 
   //=================== Text Form Field ====================
   inputDecorationTheme: InputDecorationTheme(
-    // hintStyle: TextStyle(
-    //   fontSize: 18,
-    //   fontWeight: FontWeight.w400,
-    //   color: Color(0xff181725),
-    // ),
+    hintStyle: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+      //color: Color(0xff181725),
+      color: Colors.grey
+    ),
 
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Color(0xffE2E2E2)),

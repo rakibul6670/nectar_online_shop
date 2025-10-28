@@ -17,7 +17,7 @@ class InputValidators {
 
     // ----------- email pattern check
     final emailPattern = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
-    if (!emailPattern.hasMatch(email)) {
+    if (!emailPattern.hasMatch(email.trim())) {
       return "Enter a valid email address";
     }
     return null;
