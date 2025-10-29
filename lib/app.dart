@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nectar_online_shop/business/providers/login_provider.dart';
+import 'package:nectar_online_shop/business/providers/product_provider.dart';
 import 'package:nectar_online_shop/core/theme/app_theme.dart';
 import 'package:nectar_online_shop/presentation/screens/main_nav_bar_holder_screen.dart';
 import 'package:nectar_online_shop/presentation/screens/splash_screen.dart';
@@ -15,11 +16,12 @@ class NectarOnlineShop extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => SignupProvider()),
+        ChangeNotifierProvider(create: (_)=> ProductProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
 
-        home: SplashScreen(),
+        home: MainNavBarHolderScreen(),
 
         theme: AppTheme.light,
       ),

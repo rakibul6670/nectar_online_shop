@@ -11,16 +11,36 @@ class ApiServices {
   static Logger logger = Logger();
 
   //============================ Get Data =====================================
-  // Future getData(Uri url) async {
-  //   try {
-  //     //-------------- request sent to server -----------
-  //     final response = await http.get(url);
-  //
-  //     //---------- response check ---------
-  //     if (response.statusCode == 200) {
-  //     } else {}
-  //   } catch (e) {}
-  // }
+ static Future<ApiResponse> getData(Uri url) async {
+    try {
+      //-------------- request sent to server -----------
+      final response = await http.get(url);
+
+      //---------- response check ---------
+      if (response.statusCode == 200) {
+        final decodedData = jsonDecode(response.body);
+        return ApiResponse(
+          statusCode: response.statusCode,
+          isSuccess: true,
+          responseBody: decodedData,
+        );
+      }
+      else {
+        return ApiResponse(
+          statusCode: response.statusCode,
+          isSuccess: false,
+          responseBody: null,
+        );
+      }
+    } catch (e) {
+      return ApiResponse(
+        statusCode: -1,
+        isSuccess: false,
+        responseBody: null,
+        message: e.toString(),
+      );
+    }
+  }
 
   //============================ Post Data =====================================
   static Future<ApiResponse> postData(
